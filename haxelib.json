@@ -1,0 +1,14 @@
+{
+  "name": "obfu",
+  "license": "MIT",
+  "tags": [
+    "obfuscation"
+  ],
+  "classPath": "src",
+  "contributors": [
+    "kevinresol"
+  ],
+  "releasenote": "initial release",
+  "version": "0.0.0",
+  "dependencies": {}
+}
