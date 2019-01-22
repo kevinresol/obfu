@@ -25,4 +25,11 @@ class RunTests {
     return asserts.done();
   }
   
+  public function strings() {
+    var s = Obfu.strings(['123', '456']);
+    asserts.assert(s[0] == '123');
+    asserts.assert(s[1] == '456');
+    return asserts.done();
+  }
+  
 }

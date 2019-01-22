@@ -4,9 +4,24 @@ import haxe.io.Bytes;
 import haxe.macro.Expr;
 import haxe.macro.Context;
 
+using tink.CoreApi;
+
 class Obfu {
-	public static macro function string(e:Expr):Expr {
+	public static macro function strings(e:Expr):Expr {
 		switch e.expr {
+			case EArrayDecl(values): return macro $a{values.map(function(v) return transform(v).orUse(v))};
+			case _: throw Context.error('Expected array', e.pos);
+		}
+	}
+	
+	public static macro function string(e:Expr):Expr {
+		// when unable to obfuscate, just return the original expression
+		return transform(e).orUse(e);
+	}
+	
+	#if macro
+	static function transform(e:Expr):Outcome<Expr, Error> {
+		return switch e.expr {
 			case EConst(CString(v)):
 				var key = Bytes.alloc(8);
 				for(i in 0...key.length) key.set(i, Std.random(255));
@@ -19,12 +34,13 @@ class Obfu {
 					if(k == key.length) k = 0;
 				}
 				
-				return macro obfu.Obfu._string($v{out.toHex()}, $v{key.toHex()});
+				Success(macro obfu.Obfu._string($v{out.toHex()}, $v{key.toHex()}));
+				
 			case _:
-				throw Context.error('Expected string literal', e.pos);
+				Failure(new Error('Expected string literal', e.pos));
 		}
 	}
-	
+	#end
 	public static function _string(sh:String, kh:String) {
 		var sl = sh.length >> 1;
 		var kl = kh.length >> 1;
