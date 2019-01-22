@@ -23,7 +23,7 @@ class Obfu {
 	static function transform(e:Expr):Outcome<Expr, Error> {
 		return switch e.expr {
 			case EConst(CString(v)):
-				var key = Bytes.alloc(8);
+				var key = Bytes.alloc(Std.random(8) + 8);
 				for(i in 0...key.length) key.set(i, Std.random(255));
 				
 				var k = 0;
