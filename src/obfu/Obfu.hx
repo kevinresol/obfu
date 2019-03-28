@@ -41,6 +41,8 @@ class Obfu {
 		}
 	}
 	#end
+	
+	@:native('s')
 	public static function _string(sh:String, kh:String) {
 		var sl = sh.length >> 1;
 		var kl = kh.length >> 1;
